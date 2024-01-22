@@ -1,0 +1,7 @@
+// can use webframework such fiber, gin, mux, etc.
+// but in this project I wanna try to use standart httprouter
+go get "github.com/julienschmidt/httprouter" 
+// mgo package, helps to work/connect with mongodb
+go get "gopkg.in/mgo.v2"
+// can also run this if bson doesn't included after running "gopkg.in/mgo.v2"
+go get "gopkg.in/mgo.v2/bson"
