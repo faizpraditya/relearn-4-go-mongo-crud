@@ -5,3 +5,5 @@ go get "github.com/julienschmidt/httprouter"
 go get "gopkg.in/mgo.v2"
 // can also run this if bson doesn't included after running "gopkg.in/mgo.v2"
 go get "gopkg.in/mgo.v2/bson"
+// can use this to update package and their dependencies to the latest version (-u to update)
+go get -u github.com/julienschmidt/httprouter
