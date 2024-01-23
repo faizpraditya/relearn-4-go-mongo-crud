@@ -180,3 +180,31 @@ func (uc UserController) DeleteUser(w http.ResponseWriter, r *http.Request, p ht
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, "Deleted user", oid, "\n")
 }
+
+func (uc UserController) GetAllUsers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	collection := uc.client.Database("go-project").Collection("users")
+
+	cursor, err := collection.Find(context.Background(), bson.M{})
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Println(err)
+		return
+	}
+	defer cursor.Close(context.Background())
+
+	var users []models.User
+	if err := cursor.All(context.Background(), &users); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Println(err)
+		return
+	}
+
+	uj, err := json.Marshal(users)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "%s\n", uj)
+}
