@@ -13,8 +13,8 @@ func main() {
 	uc := controllers.NewUserController(getSession())
 
 	r.GET("/user/:id", uc.GetUser)
-	// r.POST("/user", uc.CreateUser)
-	// r.DELETE("/user/:id", uc.DeleteUser)
+	r.POST("/user", uc.CreateUser)
+	r.DELETE("/user/:id", uc.DeleteUser)
 
 	// create golang server
 	http.ListenAndServe("localhost:8080", r)

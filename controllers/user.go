@@ -69,4 +69,23 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, _ ht
 	fmt.Fprintf(w, "%s\n", uj)
 }
 
-// DeleteUser
+func (uc UserController) DeleteUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	id := p.ByName("id")
+
+	if !bson.IsObjectIdHex(id) {
+		w.WriteHeader(404)
+		return
+	}
+
+	oid := bson.ObjectIdHex(id)
+
+	// mongo db function to delete by id
+	if err := uc.session.DB("mongo-golang").C("users").RemoveId(oid); err != nil {
+		w.WriteHeader(404)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, "Deleted user", oid, "\n")
+	// For HTTP handlers, it's common to use fmt.Fprint with the http.ResponseWriter because it allows you to send a response to the client via the provided writer.
+	// Using fmt.Print wouldn't be suitable in this context since it prints to the console, and it doesn't allow you to direct the output to the HTTP response.
+}
