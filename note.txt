@@ -7,3 +7,7 @@ go get "gopkg.in/mgo.v2"
 go get "gopkg.in/mgo.v2/bson"
 // can use this to update package and their dependencies to the latest version (-u to update)
 go get -u github.com/julienschmidt/httprouter
+Ensure you are using the latest version of the MongoDB Go driver.
+The gopkg.in/mgo.v2 package is the old MongoDB driver.
+The recommended driver is go.mongodb.org/mongo-driver. Consider migrating to the new driver, as the old mgo driver is deprecated.
+go get go.mongodb.org/mongo-driver
