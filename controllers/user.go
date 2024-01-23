@@ -19,7 +19,7 @@ func NewUserController(s *mgo.Session) *UserController {
 	return &UserController{s}
 }
 
-// struict method
+// struct method for UserController
 func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	id := p.ByName("id")
 
@@ -37,6 +37,7 @@ func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request, p httpr
 		return
 	}
 
+	// send message to postman
 	uj, err := json.Marshal(u)
 	if err != nil {
 		fmt.Println(err)
@@ -47,5 +48,25 @@ func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request, p httpr
 	fmt.Fprintf(w, "%s\n", uj)
 }
 
-// CreateUser
+// _ httprouter.Params, because we don't need to use the params (for example: id) from the postman/frontend because we created a new user
+func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	u := models.User{}
+
+	json.NewDecoder(r.Body).Decode(&u)
+
+	u.Id = bson.NewObjectId()
+
+	uc.session.DB("mongo-golang").C("users").Insert(u)
+
+	// send message to postman/frontend
+	uj, err := json.Marshal(u)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprintf(w, "%s\n", uj)
+}
+
 // DeleteUser
